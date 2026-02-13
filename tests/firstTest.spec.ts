@@ -1,5 +1,4 @@
 import { expect, test } from '@playwright/test'
-import { assert } from 'console'
 
 
 test.beforeEach(async ({ page }) => {
@@ -134,5 +133,4 @@ test('Assertions', async ({ page }) => {
     // Soft assertion
     await expect.soft(basicFormButton).toHaveText('Submit 5') // even when this assertion failed - next steps in test will be proceeded
     await basicFormButton.click()
-
 })
