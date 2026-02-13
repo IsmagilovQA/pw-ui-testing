@@ -1,9 +1,10 @@
 import { expect, test } from '@playwright/test'
 
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page }, testInfo) => {
     await page.goto('http://uitestingplayground.com/ajax')
     await page.getByText('Button Triggering AJAX Request').click()
+    testInfo.setTimeout(testInfo.timeout + 5000) // modifyed default timeout + 5sec for each particular test in this suite
 })
 
 
@@ -24,7 +25,7 @@ test('Auto-waiting', async ({ page }) => {
     expect(text2).toContain('Data loaded with AJAX get request.')
 
     // Case 4 with locator assertions
-    await expect(successButton).toHaveText('Data loaded with AJAX get request.', { timeout: 20000 }) // will wait only up to 5 sec by default if not use additionaly {timeout: 20000} as param
+    await expect(successButton).toHaveText('Data loaded with AJAX get request.', { timeout: 20000 }) //overrite default Expect timeout (default 5000)
 })
 
 
@@ -32,28 +33,37 @@ test('Alternative waits', async ({ page }) => {
     const successButton = page.locator('.bg-success')
 
     //___wait for element___
-    // await page.waitForSelector('.bg-success') // will wait up to 30 sec by default
+    await page.waitForSelector('.bg-success') // will wait up to 30 sec by default
 
     //___wait for particular response___
-    // await page.waitForResponse('http://uitestingplayground.com/ajaxdata')
+    await page.waitForResponse('http://uitestingplayground.com/ajaxdata')
 
     //___wait for network calls to be completed (NOT RECOMMENDED)
-    // await page.waitForLoadState('networkidle')
+    await page.waitForLoadState('networkidle')
 
     //___wait for timeout (HARD CODED option)
-    // await page.waitForTimeout(7000)
+    await page.waitForTimeout(7000)
 
-    // await page.waitForURL('url')
+    await page.waitForURL('url')
 
-    // await page.waitForEvent('download')
+    await page.waitForEvent('download')
 
-    // await page.waitForFunction('')
+    await page.waitForFunction('')
 
-    // await page.waitForRequest('')
+    await page.waitForRequest('')
 
     const text = await successButton.allTextContents()
     expect(text).toContain('Data loaded with AJAX get request.')
 })
+
+
+test('Timeouts', async ({ page }) => {
+    //test.setTimeout(10000) // will overrride config timeout on Test level
+    //test.slow() // will increase default timeout x3 (for flaky test can be used)
+    const successButton = page.locator('.bg-success')
+    await successButton.click({ timeout: 16000 }) // override config timeout for this particular click
+})
+
 
 /**
  * https://playwright.dev/docs/actionability
