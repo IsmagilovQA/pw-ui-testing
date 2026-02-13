@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 
 
 test.beforeEach(async ({ page }) => {
@@ -78,4 +78,19 @@ test('Locating parent elements', async ({ page }) => {
         .click() // chaining several filters
 
     await page.locator(':text-is("Using the Grid")').locator('..').getByRole('textbox', { name: "Email" }).click() // when you want to go one level up from child to parent using XPath
+})
+
+
+test('Reusing locators', async ({ page }) => {
+    const basicForm = page.locator('nb-card').filter({ hasText: "Basic form" })
+    const emailField = basicForm.getByRole('textbox', { name: "Email" })
+    const passwordField = basicForm.getByRole('textbox', { name: "Password" })
+    const sumbit = basicForm.getByRole('button')
+
+    await emailField.fill('test@test.com')
+    await passwordField.fill('Pass123')
+    await basicForm.locator('nb-checkbox').click()
+    await sumbit.click()
+
+    await expect(emailField).toHaveValue('test@test.com')
 })
