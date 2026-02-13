@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { assert } from 'console'
 
 
 test.beforeEach(async ({ page }) => {
@@ -115,4 +116,23 @@ test('Extracting values', async ({ page }) => {
     // value of attribute
     const placeHolderValue = await emailField.getAttribute('placeholder')
     expect(placeHolderValue).toEqual('Email')
+})
+
+
+test('Assertions', async ({ page }) => {
+    //General assertions
+    const value = 5
+    expect(value).toEqual(5) // one of generic assertion and won't wait
+
+    const basicFormButton = page.locator('nb-card').filter({ hasText: "Basic form" }).locator('button')
+    const text = await basicFormButton.textContent()
+    expect(text).toEqual('Submit') // one of generic assertion (no need to put await)
+
+    // Locator assertions
+    await expect(basicFormButton).toHaveText('Sumbit') // locator assertion (should put await since it's promise) and it will wait up to 5 sec
+
+    // Soft assertion
+    await expect.soft(basicFormButton).toHaveText('Submit 5') // even when this assertion failed - next steps in test will be proceeded
+    await basicFormButton.click()
+
 })
