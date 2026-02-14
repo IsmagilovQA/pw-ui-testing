@@ -102,3 +102,16 @@ test('Lists and Dropdowns', async ({ page }) => {
         await expect(header).toHaveCSS('background-color', colors[color])
     }
 })
+
+test('Tooltips', async ({ page }) => {
+    await page.getByText('Modal & Overlays').click()
+    await page.getByText('Tooltip').click()
+
+    // to freeze the DOM (for catching and inspecting tooltip element) -> press 'COMMAND + \' on Sources tab (devtools)
+
+    const tooltipCard = page.locator('nb-card', { hasText: 'Tooltip Placements' })
+    const topButton = await tooltipCard.getByRole('button', { name: 'Top' }).hover()
+    //page.getByRole('tooltip') // wll work only if you have a role tooltip created
+    const tooltip = await page.locator('nb-tooltip').textContent()
+    expect(tooltip).toEqual('This is a tooltip')
+})
