@@ -115,3 +115,22 @@ test('Tooltips', async ({ page }) => {
     const tooltip = await page.locator('nb-tooltip').textContent()
     expect(tooltip).toEqual('This is a tooltip')
 })
+
+test('Dialog boxes', async ({ page }) => {
+    await page.getByText('Tables & Data').click()
+    await page.getByText('Smart Table').click()
+
+    // 1st type: Web dialog box 
+    // -> no special things, it's a part of DOM so interact as usual.
+
+    // 2nd type: Browser tialog box:
+    // await page.locator('tbody tr', {hasText: 'mdo@gmail.com'}).locator('.nb-trash').click()
+    // create a listener for browser dialog:
+    page.on('dialog', dialog => {
+        expect(dialog.message()).toEqual('Are you sure you want to delete?')
+        dialog.accept()
+    })
+    await page.getByRole('table').locator('tr', { hasText: 'mdo@gmail.com' }).locator('.nb-trash').click()
+    // await expect(page.getByRole('table').locator('tr', { hasText: 'mdo@gmail.com' })).not.toBeVisible()
+    await expect(page.locator('tbody tr').first()).not.toHaveText('mdo@gmail.com')
+})
