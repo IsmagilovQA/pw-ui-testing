@@ -176,3 +176,41 @@ test('Web tables', async ({ page }) => {
         }
     }
 })
+
+test('Date pickers', async ({ page }) => {
+    await page.getByText('Forms').click()
+    await page.getByText('Datepicker').click()
+
+    // const datePickerForm = page.locator('nb-card', {hasText: 'Common Datepicker'})
+    // await datePickerForm.getByRole('textbox').click()
+
+    // const calendarInputField = page.getByPlaceholder('Form Picker')
+    // await calendarInputField.click()
+
+    // await page.locator('[class="day-cell ng-star-inserted"]').getByText('1', {exact: true}).click()
+    // await expect(calendarInputField).toHaveValue('Feb 1, 2026')
+
+
+
+    // More smart and flaxible approach based on current day and handling next month switch
+    const calendarInputField = page.getByPlaceholder('Form Picker')
+    await calendarInputField.click()
+
+    let date = new Date()
+    date.setDate(date.getDate() + 7) // current date + ofset
+    const expectedDate = date.getDate().toString()
+    const expectedMonthShort = date.toLocaleString('En-US', { month: 'short' })
+    const expectedMonthLong = date.toLocaleString('En-US', { month: 'long' })
+    const expectedYear = date.getFullYear()
+    const dateToAssert = `${expectedMonthShort} ${expectedDate}, ${expectedYear}`
+
+    let calendarMonthAndYear = await page.locator('nb-calendar-view-mode').textContent()
+    const expectedMonthAndYear = `${expectedMonthLong} ${expectedYear}`
+    while (!calendarMonthAndYear.includes(expectedMonthAndYear)) {
+        await page.locator('nb-calendar-pageable-navigation [data-name="chevron-right"]').click()
+        calendarMonthAndYear = await page.locator('nb-calendar-view-mode').textContent()
+    }
+
+    await page.locator('[class="day-cell ng-star-inserted"]').getByText(expectedDate, { exact: true }).click()
+    await expect(calendarInputField).toHaveValue(dateToAssert)
+})
