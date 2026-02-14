@@ -139,14 +139,14 @@ test('Web tables', async ({ page }) => {
     await page.getByText('Tables & Data').click()
     await page.getByText('Smart Table').click()
 
-    // Get row by any text in this row
+    // 1 case: Get row by any text in this row
     const targetRow = page.getByRole('row', { name: 'twitter@outlook.com' }) // can be used if it's unique info. Note: we can use email here till it's a text (before edit mode). In edit mode this field becomes as input and we can't use it later as locator in edit mode
     await targetRow.locator('.nb-edit').click()
     await page.locator('input-editor').getByPlaceholder('Age').clear()
     await page.locator('input-editor').getByPlaceholder('Age').fill('100')
     await page.locator('.nb-checkmark').click()
 
-    // Get the row based on the value in the specific column (ex. ID column)
+    // 2 case: Get the row based on the value in the specific column (ex. ID column)
     // await page.locator('.ng2-smart-pagination-nav', { hasText: '2' }).click()
     await page.locator('.ng2-smart-pagination-nav').getByText('2').click()
     const targetRowById = page.getByRole('row', { name: '11' }).filter({ has: page.locator('td').nth(1).getByText('11') }) // in case 11 info not unique, then we can filter out it
@@ -155,4 +155,24 @@ test('Web tables', async ({ page }) => {
     await page.locator('input-editor').getByPlaceholder('E-mail').fill('test@test.com')
     await page.locator('.nb-checkmark').click()
     await expect(targetRowById.locator('td').nth(5)).toHaveText('test@test.com')
+
+    // 2 case: Test filter of the table
+    // Loop through tables rows with validations. Searching by age = 20 -> validate result in table that all rows have only 20 as age
+    const ages = ['20', '30', '40', '200']
+
+    for (let age of ages) {
+        await page.locator('input-filter').getByPlaceholder('Age').clear()
+        await page.locator('input-filter').getByPlaceholder('Age').fill(age)
+        await page.waitForTimeout(500)
+        const ageRows = page.locator('tbody tr')
+
+        for (let row of await ageRows.all()) {
+            const cellValue = await row.locator('td').last().textContent()
+            if (age == '200') {
+                expect(await page.getByRole('table').textContent()).toContain('No data found')
+            } else {
+                expect(cellValue).toEqual(age)
+            }
+        }
+    }
 })
