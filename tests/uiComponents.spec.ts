@@ -51,7 +51,6 @@ test.describe('Form layouts page', () => {
     })
 })
 
-
 test('Checkboxes', async ({ page }) => {
     await page.getByText('Modal & Overlays').click()
     await page.getByText('Toastr').click()
@@ -71,5 +70,35 @@ test('Checkboxes', async ({ page }) => {
     for (const box of await allBoxes.all()) { // .all() array of locators
         await box.uncheck({ force: true })
         expect(await box.isChecked()).toBeFalsy()
+    }
+})
+
+test('Lists and Dropdowns', async ({ page }) => {
+    await page.getByRole('button', { name: 'Light' }).click()
+    const dropdownMenu = page.locator('ngx-header nb-select')
+    await dropdownMenu.click()
+
+    page.getByRole('list') // when the list has a UL tag
+    page.getByRole('listitem') // when list has a LI tag
+    //const optionList = page.getByRole('list').locator('nb-option')
+    const optionList = page.locator('nb-option-list nb-option')
+    await expect(optionList).toHaveText(['Light', 'Dark', 'Cosmic', 'Corporate'])
+
+    await optionList.filter({ hasText: 'Cosmic' }).click()
+    const header = page.locator('nb-layout-header')
+    await expect(header).toHaveCSS('background-color', 'rgb(50, 50, 89)')
+
+    // Validate each color for each item
+    const colors = {
+        "Light": "rgb(255, 255, 255)",
+        "Dark": "rgb(34, 43, 69)",
+        "Cosmic": "rgb(50, 50, 89)",
+        "Corporate": "rgb(255, 255, 255)"
+    }
+
+    for (const color in colors) {
+        await dropdownMenu.click()
+        await optionList.filter({ hasText: color }).click()
+        await expect(header).toHaveCSS('background-color', colors[color])
     }
 })
