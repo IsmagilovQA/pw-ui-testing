@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test'
 import { NavigationPage } from '../page-objects/navigationPage'
 import { FormLayoutsPage } from '../page-objects/formLayoutsPage'
+import { DatePickerPage } from '../page-objects/datepickerPage'
 
 
 test.beforeEach(async ({ page }) => {
@@ -18,9 +19,14 @@ test('Navigate to form page', async ({ page }) => {
 
 test('Parametrized methods', async ({ page }) => {
     const navigateTo = new NavigationPage(page)
-    const formLayout = new FormLayoutsPage(page)
+    const formLayoutPage = new FormLayoutsPage(page)
+    const datePickerPage = new DatePickerPage(page)
 
     await navigateTo.formLayoutsPage()
-    await formLayout.submitUsingTheGridFormWith('test@test.com', 'Pass123', 'Option 2')
-    await formLayout.submitInlineFormWith('John Smith', 'John@test.com', true)
+    await formLayoutPage.submitUsingTheGridFormWith('test@test.com', 'Pass123', 'Option 2')
+    await formLayoutPage.submitInlineFormWith('John Smith', 'John@test.com', true)
+
+    await navigateTo.datepickerPage()
+    await datePickerPage.selectDateWithOffset(10)
+    await datePickerPage.selectDateWithRange(5, 25)
 })
