@@ -1,7 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { NavigationPage } from '../page-objects/navigationPage'
-import { FormLayoutsPage } from '../page-objects/formLayoutsPage'
-import { DatePickerPage } from '../page-objects/datepickerPage'
+import { PageManager } from '../page-objects/pageManager'
 
 
 test.beforeEach(async ({ page }) => {
@@ -9,24 +7,21 @@ test.beforeEach(async ({ page }) => {
 })
 
 test('Navigate to form page', async ({ page }) => {
-    const navigateTo = new NavigationPage(page)
-    await navigateTo.formLayoutsPage()
-    await navigateTo.datepickerPage()
-    await navigateTo.smartTablePage()
-    await navigateTo.toastrPage()
-    await navigateTo.tooltipPage()
+    const app = new PageManager(page)
+    await app.navigateTo.formLayoutsPage()
+    await app.navigateTo.datepickerPage()
+    await app.navigateTo.smartTablePage()
+    await app.navigateTo.toastrPage()
+    await app.navigateTo.tooltipPage()
 })
 
 test('Parametrized methods', async ({ page }) => {
-    const navigateTo = new NavigationPage(page)
-    const formLayoutPage = new FormLayoutsPage(page)
-    const datePickerPage = new DatePickerPage(page)
+    const app = new PageManager(page)
+    await app.navigateTo.formLayoutsPage()
+    await app.onFormLayoursPage.submitUsingTheGridFormWith('test@test.com', 'Pass123', 'Option 2')
+    await app.onFormLayoursPage.submitInlineFormWith('John Smith', 'John@test.com', true)
 
-    await navigateTo.formLayoutsPage()
-    await formLayoutPage.submitUsingTheGridFormWith('test@test.com', 'Pass123', 'Option 2')
-    await formLayoutPage.submitInlineFormWith('John Smith', 'John@test.com', true)
-
-    await navigateTo.datepickerPage()
-    await datePickerPage.selectDateWithOffset(10)
-    await datePickerPage.selectDateWithRange(5, 25)
+    await app.navigateTo.datepickerPage()
+    await app.onDatepickerPage.selectDateWithOffset(10)
+    await app.onDatepickerPage.selectDateWithRange(5, 25)
 })

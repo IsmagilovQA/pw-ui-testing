@@ -3,7 +3,7 @@ import { Page, expect } from "@playwright/test";
 
 export class DatePickerPage {
 
-    readonly page: Page
+    private readonly page: Page
 
     constructor(page: Page) {
         this.page = page
