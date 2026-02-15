@@ -24,4 +24,6 @@ test('Parametrized methods', async ({ page }) => {
     await app.navigateTo.datepickerPage()
     await app.onDatepickerPage.selectDateWithOffset(10)
     await app.onDatepickerPage.selectDateWithRange(5, 25)
+
+    await app.onDatepickerPage.waitForNumberOfSeconds(2)
 })
