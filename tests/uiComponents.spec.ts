@@ -214,3 +214,34 @@ test('Date pickers', async ({ page }) => {
     await page.locator('[class="day-cell ng-star-inserted"]').getByText(expectedDate, { exact: true }).click()
     await expect(calendarInputField).toHaveValue(dateToAssert)
 })
+
+test('Sliders', async ({ page }) => {
+    // Option 1: updating slider attribute by executing js code on page
+    const tempGauge = page.locator('[tabtitle="Temperature"] ngx-temperature-dragger circle')
+    await tempGauge.evaluate(node => {
+        node.setAttribute('cx', '232.630')
+        node.setAttribute('cy', '232.630')
+    })
+    await tempGauge.click() // make action to chamge the state and finish evaluation of js event
+
+
+    // Option 2: to sipulate mouse movement as real user does
+    const tempBoxGauge = page.locator('[tabtitle="Temperature"] ngx-temperature-dragger')
+    await tempBoxGauge.scrollIntoViewIfNeeded() // will sroll to place our slider fully visible on browser view
+
+    const box = await tempBoxGauge.boundingBox() // to create coordinates axes around bounding box (for our slider element box, ex. element 300x300) starting in top left corner of element
+    // starting point in the center of element
+    const x = box.x + box.width / 2
+    const y = box.y + box.height / 2
+
+    // put mouse on our midlle of element
+    await page.mouse.move(x, y)
+
+    // moving mouse
+    await page.mouse.down() // pressing the mouse
+    await page.mouse.move(x + 100, y)
+    await page.mouse.move(x + 100, y + 100)
+    await page.mouse.up // releasing the mouse
+
+    await expect(tempBoxGauge).toContainText('30')
+})
