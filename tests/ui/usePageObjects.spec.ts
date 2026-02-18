@@ -27,3 +27,7 @@ test('Parametrized methods', async ({ page }) => {
 
     await app.onDatepickerPage.waitForNumberOfSeconds(2)
 })
+
+// npm run pageObjects-chrome
+// "pageObjects-all": "npm run pageObjects-chrome && npm run pageObjects-firefox" - sequential
+// "pageObjects-all": "npm run pageObjects-chrome & npm run pageObjects-firefox" - parallel
