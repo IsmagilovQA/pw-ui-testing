@@ -1,16 +1,15 @@
 import { expect, test, request } from '@playwright/test'
 import tags from '../../test-data/tags-mock.json'
-import userToken from '../../.auth/user.json'
 
 // let interceptedToken: string;
 
 test.beforeEach(async ({ page }) => {
-    // Mocking API response
-    await page.route('*/**/api/tags', async route => {
-        await route.fulfill({
-            body: JSON.stringify(tags)
-        })
-    })
+    // // Mocking API response
+    // await page.route('*/**/api/tags', async route => {
+    //     await route.fulfill({
+    //         body: JSON.stringify(tags)
+    //     })
+    // })
 
     // // Modify API response
     // await page.route('*/**/api/articles*', async route => {
@@ -64,11 +63,6 @@ test('Intercept Browser API response', async ({ page, request }) => {
     await expect(page.locator('app-article-list h1').first()).toContainText('New article via UI')
 
     // Delete article via API using intercepted response (where we extract and save slugId)
-    const deleteArticleResponse = await request.delete(`https://conduit-api.bondaracademy.com/api/articles/${slugId}`, {
-        headers: {
-            Authorization: 'Token ' + userToken.origins[0].localStorage[0].value
-        }
-    })
-
+    const deleteArticleResponse = await request.delete(`https://conduit-api.bondaracademy.com/api/articles/${slugId}`)
     expect(deleteArticleResponse.status()).toEqual(204)
 })

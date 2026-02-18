@@ -35,6 +35,9 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    extraHTTPHeaders: {
+      'Authorization': `Token ${process.env.ACCESS_TOKEN}`
+    }
     // actionTimeout: 5000, // Action timeout (no timeout by default)
     // navigationTimeout: 5000, // Navigation timeout (no timeout by default)
   },
@@ -45,7 +48,7 @@ export default defineConfig({
       name: 'setup',
       testMatch: 'auth.setup.ts'
     },
-    
+
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'], storageState: '.auth/user.json' },
