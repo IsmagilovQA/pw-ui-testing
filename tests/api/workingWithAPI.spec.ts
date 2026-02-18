@@ -1,15 +1,16 @@
 import { expect, test, request } from '@playwright/test'
 import tags from '../../test-data/tags-mock.json'
+import userToken from '../../.auth/user.json'
 
-let interceptedToken: string;
+// let interceptedToken: string;
 
 test.beforeEach(async ({ page }) => {
-    // // Mocking API response
-    // await page.route('*/**/api/tags', async route => {
-    //     await route.fulfill({
-    //         body: JSON.stringify(tags)
-    //     })
-    // })
+    // Mocking API response
+    await page.route('*/**/api/tags', async route => {
+        await route.fulfill({
+            body: JSON.stringify(tags)
+        })
+    })
 
     // // Modify API response
     // await page.route('*/**/api/articles*', async route => {
@@ -26,14 +27,14 @@ test.beforeEach(async ({ page }) => {
     await page.goto('https://conduit.bondaracademy.com/')
 
     // Log in via UI
-    await page.getByRole('link', { name: 'Sign in' }).click()
-    await page.getByRole('textbox', { name: 'Email' }).fill('vel.conduit@api.com')
-    await page.getByRole('textbox', { name: 'Password' }).fill('Qwe_1111')
-    await page.getByRole('button', { name: ' Sign in ' }).click()
+    // await page.getByRole('link', { name: 'Sign in' }).click()
+    // await page.getByRole('textbox', { name: 'Email' }).fill('vel.conduit@api.com')
+    // await page.getByRole('textbox', { name: 'Password' }).fill('Qwe_1111')
+    // await page.getByRole('button', { name: ' Sign in ' }).click()
 
-    const userResponse = await page.waitForResponse('https://conduit-api.bondaracademy.com/api/users/login')
-    const userResponseBody = await userResponse.json()
-    interceptedToken = userResponseBody.user.token
+    // const userResponse = await page.waitForResponse('https://conduit-api.bondaracademy.com/api/users/login')
+    // const userResponseBody = await userResponse.json()
+    // interceptedToken = userResponseBody.user.token
 })
 
 test('mock API test', async ({ page }) => {
@@ -65,7 +66,7 @@ test('Intercept Browser API response', async ({ page, request }) => {
     // Delete article via API using intercepted response (where we extract and save slugId)
     const deleteArticleResponse = await request.delete(`https://conduit-api.bondaracademy.com/api/articles/${slugId}`, {
         headers: {
-            Authorization: 'Token ' + interceptedToken
+            Authorization: 'Token ' + userToken.origins[0].localStorage[0].value
         }
     })
 
