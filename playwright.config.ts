@@ -30,6 +30,12 @@ export default defineConfig({
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
+    // screenshot: 'only-on-failure', // set screenshot globaly
+    // video: 'retain-on-failure', // set video globaly
+    // video: {
+    //   mode: 'on',
+    //   size: { width: 1920, height: 1080 } // video with any resolution (full HD as example here)
+    // },
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: 'http://localhost:3000',
 

@@ -8,7 +8,7 @@ test.beforeEach(async ({ page }, testInfo) => {
 })
 
 
-test.skip('Auto-waiting', async ({ page }) => {
+test('Auto-waiting', async ({ page }) => {
     const successButton = page.locator('.bg-success')
 
     // Case 1
@@ -29,7 +29,7 @@ test.skip('Auto-waiting', async ({ page }) => {
 })
 
 
-test.skip('Alternative waits', async ({ page }) => {
+test('Alternative waits', async ({ page }) => {
     const successButton = page.locator('.bg-success')
 
     //___wait for element___
@@ -57,7 +57,7 @@ test.skip('Alternative waits', async ({ page }) => {
 })
 
 
-test.skip('Timeouts', async ({ page }) => {
+test('Timeouts', async ({ page }) => {
     //test.setTimeout(10000) // will overrride config timeout on Test level
     //test.slow() // will increase default timeout x3 (for flaky test can be used)
     const successButton = page.locator('.bg-success')

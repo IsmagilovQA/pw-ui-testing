@@ -23,7 +23,16 @@ test('Parametrized methods', async ({ page }) => {
 
     await app.navigateTo.formLayoutsPage()
     await app.onFormLayoursPage.submitUsingTheGridFormWith('test@test.com', 'Pass123', 'Option 2')
+
+    await page.screenshot({path: 'screenshots/formlayoutsPage.png'})
+    
+    // save screenshot as binary to sending somewhere
+    const buffer = await page.screenshot()
+    console.log(buffer.toString('base64'))
+
     await app.onFormLayoursPage.submitInlineFormWith(randomFullName, randomEmail, true)
+
+    await page.locator('nb-card', {hasText: 'Inline form'}).screenshot({path: 'screenshots/inlineForm.png'})
 
     await app.navigateTo.datepickerPage()
     await app.onDatepickerPage.selectDateWithOffset(10)
