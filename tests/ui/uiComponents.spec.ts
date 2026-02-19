@@ -6,13 +6,18 @@ test.beforeEach(async ({ page }) => {
 })
 
 
-test.describe('Form layouts page', () => {
+test.describe.only('Form layouts page', () => {
+    test.describe.configure({ retries: 2 }) // set retries on test or describle level
     test.beforeEach(async ({ page }) => {
         await page.getByText('Forms').click()
         await page.getByText('Form Layouts').click()
     })
 
-    test('Input fields', async ({ page }) => {
+    test('Input fields', async ({ page, testInfo }) => {
+        if (testInfo.retry) {
+            // some ,logic here that can be done before retry (for ex. clean up smth before retry)
+        }
+
         const gridEmailInput = page.locator('nb-card', { hasText: 'Using the Grid' }).getByRole('textbox', { name: 'Email' })
         await gridEmailInput.fill('test@test.com')
         await gridEmailInput.clear()
@@ -20,7 +25,7 @@ test.describe('Form layouts page', () => {
 
         // generic assertion
         const inputValue = await gridEmailInput.inputValue()
-        expect(inputValue).toEqual('test2@test.com')
+        expect(inputValue).toEqual('test2@test.com1')
 
         // locator assertion
         await expect(gridEmailInput).toHaveValue('test2@test.com')
