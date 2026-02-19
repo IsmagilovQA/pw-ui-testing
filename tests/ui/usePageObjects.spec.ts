@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { PageManager } from '../../page-objects/pageManager'
+import { faker } from '@faker-js/faker'
 
 
 test.beforeEach(async ({ page }) => {
@@ -17,9 +18,12 @@ test('Navigate to form page', async ({ page }) => {
 
 test('Parametrized methods', async ({ page }) => {
     const app = new PageManager(page)
+    const randomFullName = faker.person.fullName()
+    const randomEmail = `${randomFullName.replace(' ', '')}${faker.number.int(50)}@test.com`
+
     await app.navigateTo.formLayoutsPage()
     await app.onFormLayoursPage.submitUsingTheGridFormWith('test@test.com', 'Pass123', 'Option 2')
-    await app.onFormLayoursPage.submitInlineFormWith('John Smith', 'John@test.com', true)
+    await app.onFormLayoursPage.submitInlineFormWith(randomFullName, randomEmail, true)
 
     await app.navigateTo.datepickerPage()
     await app.onDatepickerPage.selectDateWithOffset(10)
