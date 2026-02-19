@@ -1,19 +1,23 @@
 import { expect, test } from '@playwright/test'
 
+test.describe.configure({mode: 'parallel'}) // in case you rant to run in parallel all tests within this spec file
 
 test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:4200/')
 })
 
 
-test.describe.only('Form layouts page', () => {
+test.describe.parallel('Form layouts page', () => { // will be parallel only tests within describe
+
     test.describe.configure({ retries: 2 }) // set retries on test or describle level
+    // test.describe.configure({mode: 'serial'}) // it's like dependency (dependsOn). In case 'Input fields' failed, then 'Radio buttons' test will be skipped
+
     test.beforeEach(async ({ page }) => {
         await page.getByText('Forms').click()
         await page.getByText('Form Layouts').click()
     })
 
-    test('Input fields', async ({ page, testInfo }) => {
+    test('Input fields', async ({ page }, testInfo) => {
         if (testInfo.retry) {
             // some ,logic here that can be done before retry (for ex. clean up smth before retry)
         }
@@ -21,11 +25,11 @@ test.describe.only('Form layouts page', () => {
         const gridEmailInput = page.locator('nb-card', { hasText: 'Using the Grid' }).getByRole('textbox', { name: 'Email' })
         await gridEmailInput.fill('test@test.com')
         await gridEmailInput.clear()
-        await gridEmailInput.pressSequentially('test2@test.com', { delay: 500 })
+        await gridEmailInput.pressSequentially('test2@test.com')
 
         // generic assertion
         const inputValue = await gridEmailInput.inputValue()
-        expect(inputValue).toEqual('test2@test.com1')
+        expect(inputValue).toEqual('test2@test.com')
 
         // locator assertion
         await expect(gridEmailInput).toHaveValue('test2@test.com')
