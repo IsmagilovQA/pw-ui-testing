@@ -4,7 +4,7 @@ import { faker } from '@faker-js/faker'
 
 
 test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:4200/')
+    await page.goto('/')
 })
 
 test('Navigate to form page', async ({ page }) => {
@@ -22,7 +22,7 @@ test('Parametrized methods', async ({ page }) => {
     const randomEmail = `${randomFullName.replace(' ', '')}${faker.number.int(50)}@test.com`
 
     await app.navigateTo.formLayoutsPage()
-    await app.onFormLayoursPage.submitUsingTheGridFormWith('test@test.com', 'Pass123', 'Option 2')
+    await app.onFormLayoursPage.submitUsingTheGridFormWith(process.env.USERNAME, process.env.PASSWORD, 'Option 2')
 
     await page.screenshot({path: 'screenshots/formlayoutsPage.png'})
     

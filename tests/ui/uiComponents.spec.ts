@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test'
 test.describe.configure({mode: 'parallel'}) // in case you rant to run in parallel all tests within this spec file
 
 test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:4200/')
+    await page.goto('/')
 })
 
 
