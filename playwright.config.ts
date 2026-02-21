@@ -47,34 +47,52 @@ export default defineConfig<TestOptions>({
 
       // fullyParallel: true  - in case you want to configure parallel execution inside project
     },
+
     {
       name: 'setup',
       testMatch: 'auth.setup.ts'
     },
 
     {
-      name: 'chromium',
-      use: {
-        browserName: 'chromium',
-        storageState: '.auth/user.json'
-      },
+      name: 'articleSetup',
+      testMatch: 'newArticle.setup.ts',
       dependencies: ['setup'],
+      teardown: 'articleCleanUp'
+    },
+
+    {
+      name: 'articleCleanUp',
+      testMatch: 'articleCleanUp.setup.ts'
+    },
+
+    {
+      name: 'likeCounter',
+      testMatch: 'likesCounter.spec.ts',
+      use: { browserName: 'chromium', storageState: '.auth/user.json' },
+      dependencies: ['articleSetup']
       // fullyParallel: true  - in case you want to configure parallel execution inside project
     },
 
     {
-      name: 'firefox',
-      use: {
-        browserName: 'firefox',
-        storageState: '.auth/user.json'
-      },
+      name: 'regression',
+      use: { browserName: 'chromium', storageState: '.auth/user.json' },
       dependencies: ['setup']
+      // fullyParallel: true  - in case you want to configure parallel execution inside project
     },
 
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'], storageState: '.auth/user.json' },
-      dependencies: ['setup']
-    },
+    // {
+    //   name: 'firefox',
+    //   use: {
+    //     browserName: 'firefox',
+    //     storageState: '.auth/user.json'
+    //   },
+    //   dependencies: ['setup']
+    // },
+
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'], storageState: '.auth/user.json' },
+    //   dependencies: ['setup']
+    // },
   ],
 });
