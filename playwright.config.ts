@@ -33,8 +33,8 @@ export default defineConfig<TestOptions>({
     // actionTimeout: 5000, // Action timeout (no timeout by default)
     // navigationTimeout: 5000, // Navigation timeout (no timeout by default)
   },
-  globalSetup: require.resolve('./global-setup.ts'),
-  globalTeardown: require.resolve('./global-teardown.ts'),
+  //globalSetup: require.resolve('./global-setup.ts'),
+  //globalTeardown: require.resolve('./global-teardown.ts'),
 
   /* Configure projects for major browsers */
   projects: [
@@ -86,6 +86,14 @@ export default defineConfig<TestOptions>({
       use: { browserName: 'chromium', storageState: '.auth/user.json' },
       dependencies: ['setup']
       // fullyParallel: true  - in case you want to configure parallel execution inside project
+    },
+    {
+      name: 'mobile',
+      testMatch: 'testMobile.spec.ts',
+      use: {
+        ...devices['iPhone 12 Pro Max'], // 1st option
+        // viewport: { width: 414, height: 800 } // 2nd option
+      }
     },
 
     // {
