@@ -81,7 +81,7 @@ export default defineConfig<TestOptions>({
     },
 
     {
-      name: 'regression',
+      name: 'chromium',
       testIgnore: 'likesCounter.spec.ts',
       use: { browserName: 'chromium', storageState: '.auth/user.json' },
       dependencies: ['setup']

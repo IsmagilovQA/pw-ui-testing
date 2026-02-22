@@ -7,7 +7,7 @@ test.beforeEach(async ({ page }) => {
     await page.goto('/')
 })
 
-test('Navigate to form page', async ({ page }) => {
+test('Navigate to form page @smoke @regression', async ({ page }) => {
     const app = new PageManager(page)
     await app.navigateTo.formLayoutsPage()
     await app.navigateTo.datepickerPage()
@@ -16,7 +16,7 @@ test('Navigate to form page', async ({ page }) => {
     await app.navigateTo.tooltipPage()
 })
 
-test('Parametrized methods', async ({ page }) => {
+test('Parametrized methods @smoke', async ({ page }) => {
     const app = new PageManager(page)
     const randomFullName = faker.person.fullName()
     const randomEmail = `${randomFullName.replace(' ', '')}${faker.number.int(50)}@test.com`
@@ -44,3 +44,6 @@ test('Parametrized methods', async ({ page }) => {
 // npm run pageObjects-chrome
 // "pageObjects-all": "npm run pageObjects-chrome && npm run pageObjects-firefox" - sequential
 // "pageObjects-all": "npm run pageObjects-chrome & npm run pageObjects-firefox" - parallel
+
+// Run by tag:  npx playwright test --project=chromium --grep @smoke
+// Run by tags:  npx playwright test --project=chromium --grep "@smoke|@functional"

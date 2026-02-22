@@ -7,7 +7,7 @@ test.beforeEach(async ({ page }) => {
 })
 
 
-test.describe.parallel('Form layouts page', () => { // will be parallel only tests within describe
+test.describe.parallel('Form layouts page @functional', () => { // will be parallel only tests within describe
 
     test.describe.configure({ retries: 2 }) // set retries on test or describle level
     // test.describe.configure({mode: 'serial'}) // it's like dependency (dependsOn). In case 'Input fields' failed, then 'Radio buttons' test will be skipped
