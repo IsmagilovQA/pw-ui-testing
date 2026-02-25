@@ -9,7 +9,7 @@ test.beforeEach(async ({ page }) => {
 
 test.describe.parallel('Form layouts page @functional', () => { // will be parallel only tests within describe
 
-    test.describe.configure({ retries: 2 }) // set retries on test or describle level
+    test.describe.configure({ retries: 0 }) // set retries on test or describle level
     // test.describe.configure({mode: 'serial'}) // it's like dependency (dependsOn). In case 'Input fields' failed, then 'Radio buttons' test will be skipped
 
     test.beforeEach(async ({ page }) => {
@@ -35,7 +35,7 @@ test.describe.parallel('Form layouts page @functional', () => { // will be paral
         await expect(gridEmailInput).toHaveValue('test2@test.com')
     })
 
-    test('Radio buttons', async ({ page }) => {
+    test.only('Radio buttons', async ({ page }) => {
         const gridForm = page.locator('nb-card', { hasText: 'Using the Grid' })
 
         // Option 1
@@ -46,17 +46,21 @@ test.describe.parallel('Form layouts page @functional', () => { // will be paral
         // await gridForm.locator('label', { hasText: 'Option 2' }).click()
 
 
-        await gridForm.getByRole('radio', { name: 'Option 1' }).check({ force: true })
+        await gridForm.getByRole('radio', { name: 'Option 2' }).check({ force: true })
         // generic asserion
-        const radioStatus = await gridForm.getByRole('radio', { name: 'Option 1' }).isChecked() // returns boolean
-        expect(radioStatus).toBeTruthy()
-        // locator assertion
-        await expect(gridForm.getByRole('radio', { name: 'Option 1' })).toBeChecked()
+        const radioStatus = await gridForm.getByRole('radio', { name: 'Option 2' }).isChecked() // returns boolean
+        // expect(radioStatus).toBeTruthy()
+        // // locator assertion
+        // await expect(gridForm.getByRole('radio', { name: 'Option 1' })).toBeChecked()
 
+        // Checking visually that option 1 is selected
+        await expect(gridForm).toHaveScreenshot() // as baseline
+        // Also you can setup some settings: .toHaveScreenshot({maxDiffPixels: 150})
+        // In case you need to update all baseline snapshots at once: npx playwright test --update-snapshots 
 
-        await gridForm.getByLabel('Option 2').check({ force: true })
-        expect(await gridForm.getByRole('radio', { name: 'Option 1' }).isChecked()).toBeFalsy()
-        expect(await gridForm.getByRole('radio', { name: 'Option 2' }).isChecked()).toBeTruthy()
+        // await gridForm.getByLabel('Option 2').check({ force: true })
+        // expect(await gridForm.getByRole('radio', { name: 'Option 1' }).isChecked()).toBeFalsy()
+        // expect(await gridForm.getByRole('radio', { name: 'Option 2' }).isChecked()).toBeTruthy()
     })
 })
 

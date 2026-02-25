@@ -8,14 +8,15 @@ export default defineConfig<TestOptions>({
   // timeout: 10000, // Test timeout (default is 30000 mc)
   // globalTimeout: 60000, // Global timeout (no timeout by default)
   // expect: {
-  //   timeout: 2000 // Expect timeout (default is 5000 mc)
+  //   timeout: 2000, // Expect timeout (default is 5000 mc)
+  //   toMatchSnapshot: {maxDiffPixels: 50}
   // },
 
   fullyParallel: false, // it related of parrallel running within spec file. If false - it will run within spec file sequentially
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 1, // set retry globaly
   workers: process.env.CI ? 1 : undefined, // related to workers. One separate worker per each spec file. In underfined - pw will create max workers that possible for my PC
-  reporter: 'html', // list, json, junit
+  reporter: [['html', 'list']], // list, json, junit, html
   // reporter: [
   //   ['json', {outputFile: 'test-results/jsonReport.json'}],
   //   ['junit', {outputFile: 'test-results/junitReport.xml'}],
