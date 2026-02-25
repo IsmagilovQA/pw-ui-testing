@@ -15,7 +15,19 @@ export default defineConfig<TestOptions>({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 1, // set retry globaly
   workers: process.env.CI ? 1 : undefined, // related to workers. One separate worker per each spec file. In underfined - pw will create max workers that possible for my PC
-  reporter: 'html',
+  reporter: 'html', // list, json, junit
+  // reporter: [
+  //   ['json', {outputFile: 'test-results/jsonReport.json'}],
+  //   ['junit', {outputFile: 'test-results/junitReport.xml'}],
+  //   ['allure-playwright']
+  // ],
+  // For allure report:
+  // install: allure: brew install allure
+  // npm install -D allure-playwright --force
+  // add as: reporter: "allure-playwright",
+  // generatre report: allure generate ./allure-results -o ./allure-report
+  // open allure report: allure open ./allure-report
+
   use: {
     // screenshot: 'only-on-failure', // set screenshot globaly
     // video: 'retain-on-failure', // set video globaly
