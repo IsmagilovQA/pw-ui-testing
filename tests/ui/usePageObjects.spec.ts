@@ -47,3 +47,10 @@ test('Parametrized methods @smoke', async ({ page }) => {
 
 // Run by tag:  npx playwright test --project=chromium --grep @smoke
 // Run by tags:  npx playwright test --project=chromium --grep "@smoke|@functional"
+
+// Docker - building container with image with all needed dependencies:
+// docker build -t pw-pageobject-test .
+// check imahes list: docker images
+// run our image: docker run -it pw-pageobject-test -> inside our image (root@7408064f5527:/app#) run command: npm run pageObjects-chrome
+// cotrol+D. - exit from container folder
+// run docker compose: docker-compose up --build

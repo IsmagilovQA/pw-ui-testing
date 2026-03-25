@@ -124,4 +124,9 @@ export default defineConfig<TestOptions>({
     //   dependencies: ['setup']
     // },
   ],
+
+  webServer: {
+    command: 'npm run start',
+    url: 'http://localhost:4200'
+  }
 });
