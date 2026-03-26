@@ -16,7 +16,16 @@ export default defineConfig<TestOptions>({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 1, // set retry globaly
   workers: process.env.CI ? 1 : undefined, // related to workers. One separate worker per each spec file. In underfined - pw will create max workers that possible for my PC
-  reporter: [['html', 'list']], // list, json, junit, html
+  reporter: [
+  process.env.CI ? ["dot"] : ["list"],
+  [
+      "@argos-ci/playwright/reporter",
+      {
+        uploadToArgos: !!process.env.CI,
+      },
+  ],
+  // [['html', 'list']], // list, json, junit, html
+  ],
   // reporter: [
   //   ['json', {outputFile: 'test-results/jsonReport.json'}],
   //   ['junit', {outputFile: 'test-results/junitReport.xml'}],
@@ -40,6 +49,7 @@ export default defineConfig<TestOptions>({
     baseURL: 'http://localhost:4200',
     globalsQaURL: 'https://www.globalsqa.com/demo-site/draganddrop',
     trace: 'on-first-retry',
+    screenshot: "only-on-failure",
     extraHTTPHeaders: {
       'Authorization': `Token ${process.env.ACCESS_TOKEN}`
     }

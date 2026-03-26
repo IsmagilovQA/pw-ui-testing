@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test'
 import { PageManager } from '../../page-objects/pageManager'
 import { faker } from '@faker-js/faker'
+import { argosScreenshot } from "@argos-ci/playwright";
 
 
 test.beforeEach(async ({ page }) => {
@@ -44,7 +45,9 @@ test('Parametrized methods @smoke', async ({ page }) => {
 test.only('Testing with Argos CI', async ({ page }) => {
     const app = new PageManager(page)
     await app.navigateTo.formLayoutsPage()
+    await argosScreenshot(page, "form layout page");
     await app.navigateTo.datepickerPage()
+    await argosScreenshot(page, "date picker page");
 })
 
 // npm run pageObjects-chrome
