@@ -41,6 +41,12 @@ test('Parametrized methods @smoke', async ({ page }) => {
     await app.onDatepickerPage.waitForNumberOfSeconds(2)
 })
 
+test.only('Testing with Argos CI', async ({ page }) => {
+    const app = new PageManager(page)
+    await app.navigateTo.formLayoutsPage()
+    await app.navigateTo.datepickerPage()
+})
+
 // npm run pageObjects-chrome
 // "pageObjects-all": "npm run pageObjects-chrome && npm run pageObjects-firefox" - sequential
 // "pageObjects-all": "npm run pageObjects-chrome & npm run pageObjects-firefox" - parallel
