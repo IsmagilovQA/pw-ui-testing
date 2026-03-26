@@ -42,7 +42,7 @@ test('Parametrized methods @smoke', async ({ page }) => {
     await app.onDatepickerPage.waitForNumberOfSeconds(2)
 })
 
-test.only('Testing with Argos CI', async ({ page }) => {
+test('Testing with Argos CI', async ({ page }) => {
     const app = new PageManager(page)
     await app.navigateTo.formLayoutsPage()
     await argosScreenshot(page, "form layout page");

@@ -1,6 +1,6 @@
 import { test as setup } from '@playwright/test'
-import user from '../../.auth/user.json'
 import fs from 'fs'
+import path from 'path'
 
 
 const authFile = '.auth/user.json'
@@ -18,8 +18,29 @@ setup('authentication', async ({ request }) => {
     const responseBody = await response.json()
     const accessToken = responseBody.user.token
 
-    // accessToken from our api call save to user file
-    user.origins[0].localStorage[0].value = accessToken
+    // Create the user authentication object
+    const user = {
+        cookies: [],
+        origins: [
+            {
+                origin: 'https://conduit.bondaracademy.com',
+                localStorage: [
+                    {
+                        name: 'jwtToken',
+                        value: accessToken
+                    }
+                ]
+            }
+        ]
+    }
+
+    // Ensure .auth directory exists
+    const authDir = path.dirname(authFile)
+    if (!fs.existsSync(authDir)) {
+        fs.mkdirSync(authDir, { recursive: true })
+    }
+
+    // Save accessToken to user file
     fs.writeFileSync(authFile, JSON.stringify(user))
 
     // Assign token to process environment variable for using it everywhere in all test where token is needed
